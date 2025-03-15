@@ -11,7 +11,7 @@ from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 import keras_tuner as kt
 
 # 1. 获取数据
-def get_data(ticker, start_date="2010-01-01", end_date="2025-01-01"):
+def get_data(ticker, start_date="2010-01-01", end_date="2025-03-15"):
     data = yf.download(ticker, start=start_date, end=end_date)
     return data
 
@@ -178,3 +178,76 @@ with open("scaler.pkl", "wb") as f:
     pickle.dump(scaler, f)
 with open("data.pkl", "wb") as f:
     pickle.dump(data, f)
+
+
+# 加载已训练的最佳模型和 scaler
+with open("scaler.pkl", "rb") as f:
+    scaler = pickle.load(f)
+with open("data.pkl", "rb") as f:
+    data = pickle.load(f)
+
+best_model = tf.keras.models.load_model("best_model.h5")
+
+# 只选择用于训练的相同特征集
+features = ['Close', 'Open', 'High', 'Low', 'Volume', 'MA_10', 'MA_50', 'RSI', 'MACD', 'BB_upper', 'BB_lower', 'Return']
+
+
+def inverse_transform(predictions, scaler, n_features):
+    dummy = np.zeros((predictions.shape[0], n_features - 1))
+    pred_full = np.concatenate((predictions, dummy), axis=1)
+    return scaler.inverse_transform(pred_full)[:, 0]
+
+
+def predict_future_prices(model, recent_data, scaler, n_days=1):
+    predicted_prices = []
+    input_data = recent_data.copy()
+
+    for _ in range(n_days):
+        prediction = model.predict(np.expand_dims(input_data, axis=0))
+        prediction_actual = inverse_transform(prediction.reshape(-1, 1), scaler, len(features))
+        predicted_prices.append(prediction_actual[0])
+
+        # 更新输入数据，将新预测值加入并移除最旧的数据点
+        new_entry = np.zeros((1, len(features)))
+        new_entry[0, 0] = prediction[0, 0]  # 只更新收盘价
+        input_data = np.vstack([input_data[1:], new_entry])
+
+    return predicted_prices
+
+
+# 让用户选择预测天数
+while True:
+    try:
+        days_to_predict = int(input("请输入要预测的天数（1、5、10、30）："))
+        if days_to_predict not in [1, 5, 10, 30]:
+            raise ValueError("请输入有效的天数: 1, 5, 10, 30.")
+        break
+    except ValueError as e:
+        print(e)
+
+# 获取最近的时间窗口数据进行预测
+recent_data = data[features].iloc[-60:, :].values
+recent_data_scaled = scaler.transform(recent_data)
+
+# 进行预测
+future_predictions = predict_future_prices(best_model, recent_data_scaled, scaler, days_to_predict)
+
+# 生成日期索引
+last_date = data.index[-1]
+predicted_dates = pd.date_range(start=last_date, periods=days_to_predict + 1, freq='B')[1:]
+
+# 绘制预测趋势图
+plt.figure(figsize=(12, 6))
+plt.plot(predicted_dates, future_predictions, marker='o', linestyle='-', color='red', label='Predicted Prices')
+plt.xlabel('Date')
+plt.ylabel('Stock Price')
+plt.title(f'Predicted Stock Prices for the Next {days_to_predict} Days')
+plt.legend()
+plt.xticks(rotation=45)
+plt.grid()
+plt.show()
+
+# 输出预测结果
+print(f"未来 {days_to_predict} 天的预测股价:")
+for date, price in zip(predicted_dates, future_predictions):
+    print(f"{date.strftime('%Y-%m-%d')}: {price:.2f}")
