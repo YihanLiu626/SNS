@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>908</width>
+    <height>680</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>Arial</family>
+    <pointsize>14</pointsize>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QLineEdit" name="lineEdit_stock">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>100</y>
+      <width>121</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: white;
+    border: 1px solid #D0D3D4; /* 浅灰色边框 */
+    padding: 5px;
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="placeholderText">
+     <string>e.g.TSLA</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_stock">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>100</y>
+      <width>121</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>-1</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: #2C3E50; /* 深灰蓝色 */
+    font-size: 14px</string>
+    </property>
+    <property name="text">
+     <string>Enter stock ticker: </string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox_days">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>170</y>
+      <width>104</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: white;
+    border: 1px solid #D0D3D4; /* 浅灰色边框 */
+    padding: 5px;
+</string>
+    </property>
+    <item>
+     <property name="text">
+      <string>1</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>5</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>10</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>30</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QLabel" name="label_days">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>170</y>
+      <width>171</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>-1</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: #2C3E50; /* 深灰蓝色 */
+    font-size: 14px</string>
+    </property>
+    <property name="text">
+     <string>Select days to predict:</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_predict">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>100</y>
+      <width>81</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>-1</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: rgb(100, 149, 237); /* 柔和蓝色 */
+    color: white;
+    font-size: 14px;
+    border-radius: 8px; /* 圆角 */
+    padding: 8px; /* 增加内边距 */
+}
+
+QPushButton:hover {
+    background-color: rgb(70, 130, 180); /* 鼠标悬停变深一点 */
+}</string>
+    </property>
+    <property name="text">
+     <string>Predict</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_result">
+    <property name="geometry">
+     <rect>
+      <x>500</x>
+      <y>110</y>
+      <width>351</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>-1</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel#label_result {
+    font-size: 18px;
+    font-weight: bold;
+    color: #2C3E50; /* 深色字体 */
+    padding: 5px;
+    border-bottom: 2px solid rgb(176, 224, 230);
+}</string>
+    </property>
+    <property name="text">
+     <string>Predicted Price: $0.00</string>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="table_predictions">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>240</y>
+      <width>201</width>
+      <height>311</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QTableWidget {
+    background-color: white; /* 表格背景 */
+    gridline-color: rgb(200, 200, 200); /* 网格线颜色 */
+}
+
+QHeaderView::section {
+    background-color: rgb(100, 149, 237); /* 柔和蓝色 */
+    color: black; /* 文字颜色 */
+    font-weight: bold;
+    padding: 5px;
+    border: 1px solid rgb(150, 200, 220); /* 轻微边框 */
+}</string>
+    </property>
+    <property name="columnCount">
+     <number>2</number>
+    </property>
+    <column>
+     <property name="text">
+      <string>Date</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Price</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QWidget" name="plot_widget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>190</y>
+      <width>561</width>
+      <height>421</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QWidget#plot_widget {
+    background-color: rgb(245, 245, 245);
+    border: 2px solid rgb(176, 224, 230);
+    border-radius: 10px;
+}</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>908</width>
+     <height>37</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
