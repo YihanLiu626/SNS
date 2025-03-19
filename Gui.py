@@ -10,8 +10,8 @@ import pickle
 # -------------------------------
 # 1. 加载先前训练好的模型和对象
 # -------------------------------
-# 加载模型（使用 ModelCheckpoint 保存为 best_model.h5）
-best_model = tf.keras.models.load_model("best_model.h5")
+# 加载模型（使用 ModelCheckpoint 保存为 best_model_250319.h5）
+best_model = tf.keras.models.load_model("best_model_250319.h5")
 
 # 加载 scaler（请确保在训练脚本中将 scaler 保存为 scaler.pkl）
 with open("scaler.pkl", "rb") as f:
