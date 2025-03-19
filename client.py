@@ -8,7 +8,7 @@ SERVER_URL = "http://127.0.0.1:5001/predict"
 
 def extract_stock_info(user_input):
     """ 提取用户输入的股票代码和预测天数 """
-    match = re.search(r"(TSLA|AAPL)", user_input.upper())
+    match = re.search(r"(GOOG|AAPL|AMZN)", user_input.upper())
     if not match:
         return None, None
 
@@ -28,7 +28,7 @@ def chatbot():
     print("\n🔮 Welcome to the Oracle Stock Predictor 🔮")
     print("Ask me about stock price predictions!")
     print("Examples:")
-    print("  - What will TSLA stock price be in 5 days?")
+    print("  - What will GOOG stock price be in 5 days?")
     print("  - Predict AAPL stock price in 30 days.")
     print("Type 'exit' to quit.\n")
 
@@ -40,7 +40,7 @@ def chatbot():
 
         ticker, days = extract_stock_info(user_input)
         if not ticker or not days:
-            print("Oracle: Please enter a valid stock (TSLA, AAPL) and period (1, 5, 10, 30 days).")
+            print("Oracle: Please enter a valid stock (GOOG, AMZN, AAPL) and period (1, 5, 10, 30 days).")
             continue
 
         response = requests.post(SERVER_URL, json={"ticker": ticker, "days": days})
