@@ -24,6 +24,7 @@ def get_data(ticker):
     """ 获取最新的股票数据，并确保至少有 60 天数据 """
     data = yf.download(ticker, period="3mo")  # 获取最近三个月数据，确保有足够的天数
 
+
     # 确保数据至少有 60 天
     if len(data) < time_step:
         print(f"⚠️ {ticker} 数据不足 {time_step} 天，仅有 {len(data)} 天数据。使用所有可用数据。")
@@ -92,8 +93,8 @@ def predict():
     ticker = data.get("ticker", "AAPL").upper()
     days_to_predict = int(data.get("days", 1))
 
-    if ticker not in ["AAPL", "TSLA"]:
-        return jsonify({"error": "Only AAPL and TSLA are supported"}), 400
+    if ticker not in ["AAPL", "GOOG","AMZN"]:
+        return jsonify({"error": "Only AAPL and TSLA and AMZN are supported"}), 400
 
     model_file = f"fixed_best_model_{ticker}.h5"
     scaler_file = f"scaler_{ticker}.pkl"
